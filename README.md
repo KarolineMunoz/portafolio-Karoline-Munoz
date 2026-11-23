@@ -2,8 +2,8 @@
 
 # Links
 
-Figma: 
-GitHub Pages: 
+Figma: https://www.figma.com/design/aPT5jqO0oRiTpiTqYrMksw/Ex%C3%A1men-Karoline-Mu%C3%B1oz?node-id=51-621&t=cdnxK6u9aPdbOA4B-1 
+GitHub Pages: https://karolinemunoz.github.io/portafolio-Karoline-Munoz/
 
 # Referencias
 
