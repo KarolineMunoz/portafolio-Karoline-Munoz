@@ -1,0 +1,598 @@
+/* =========================================================
+   Portafolio Karoline Muñoz
+   Solo flexbox + unidades rem y %. Sin grid, position ni frameworks.
+   Medidas tomadas del diseño de Figma (escritorio 1440px, 1rem = 16px)
+   ========================================================= */
+
+/* ---------- 1. Tipografía JetBrains Mono ---------- */
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("jetbrain/JetBrainsMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("jetbrain/JetBrainsMono-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("jetbrain/JetBrainsMono-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* ---------- 2. Variables y reset ---------- */
+:root {
+  /* Paleta */
+  --color-blanco: #F7F7F7;
+  --color-rojo: #AF0000;
+  --color-negro: #0F0707;
+
+  --color-fondo: var(--color-blanco);
+  --color-texto: var(--color-negro);
+  --color-acento: var(--color-rojo);
+  --color-panel: #0f0f0f; /* gris de los paneles de proyectos */
+
+  --fuente: "JetBrains Mono", "Courier New", monospace;
+
+  /* Tamaños de texto (escritorio) */
+  --tam-logo: 2.5rem;      /* 40px · Bold    */
+  --tam-titulo: 2.5rem;    /* 40px · Bold */
+  --tam-nav: 1.65rem;      /* ~26px · Medium */
+  --tam-cuerpo: 1.65rem;   /* ~26px · Medium */
+  --tam-lista: 1.25rem;    /* 20px · Regular */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* El diseño (en rem) escala como en Figma sin usar otra media query:
+   16px desde 1440px y proporcionalmente menos en ventanas más angostas.
+   En mobile se vuelve a 16px dentro de la media query de mobile. */
+html {
+   font-size: clamp(0.6rem, 1.111vw, 1.2rem);
+  max-width: 100%;
+  overflow-x: hidden; /* seguro extra contra el scroll horizontal */
+}
+
+/* Texto solo para lectores de pantalla (no se ve) */
+.oculto {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente);
+  font-weight: 400;
+  line-height: normal; /* "Auto" en Figma */
+   cursor: url("iconos/cursor.svg") 16 16, auto;
+}
+
+/* Cursor personalizado también sobre enlaces y botones */
+a,
+label {
+  cursor: url("iconos/cursor.svg") 16 16, pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- 3. Cabecera ---------- */
+/* z-index funciona en ítems flex: deja el menú por encima de la portada */
+.cabecera {
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap; /* si no cabe, el menú baja a otra línea */
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem 1rem;
+  padding: 1rem 7.3% 0 3rem;
+}
+
+/* Logo: efecto de escritura, una sola vez al abrir la página.
+   11 caracteres = 11 cuadros, uno cada 400 ms (10 pasos x 400 ms = 4 s).
+   En JetBrains Mono cada letra mide 0.6 del tamaño de fuente. */
+.logo {
+  box-sizing: content-box; /* el cursor no le quita espacio a las letras */
+  flex-shrink: 0;          /* el logo no se comprime ni se recorta */
+  margin-top: 0.625rem;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: var(--tam-logo);
+  font-weight: 700;
+  border-right: 0.0625rem solid var(--color-texto); /* cursor */
+  animation: escribir-logo 4s steps(10, end) both;
+}
+
+@keyframes escribir-logo {
+  from { width: calc(var(--tam-logo) * 0.6); }       /* "2"           */
+  to   { width: calc(var(--tam-logo) * 0.6 * 11); }  /* "258ALMENDRA" */
+}
+
+/* Flecha BAJAR: solo existe en el diseño mobile */
+.bajar {
+  display: none;
+}
+
+.cabecera nav {
+  display: flex;
+  align-items: flex-start;
+  gap: 5rem;   /* ← cambia este número */
+}
+
+/* Botones del menú: son los SVG de mis componentes de Figma
+   (BOTÓN PROYECTOS y BOTÓN SOBRE MÍ), un archivo por variante.
+   Los dos SVG de cada botón tienen el mismo tamaño y el texto en el
+   mismo lugar, así que al cambiar de uno a otro solo cambia la línea. */
+.cabecera nav a {
+  display: flex;
+}
+
+/* 64px de alto en Figma (3.33rem); el ancho sale solo */
+.cabecera nav img {
+  width: auto;
+  max-width: none;
+  height: 3.33rem;
+}
+
+/* El SVG incluye el espacio donde crece la línea en el hover.
+   El margin negativo hace que ese espacio no empuje al otro botón. */
+.cabecera nav .nav-proyectos img {
+  margin: 0 -0.885rem 0 -0.833rem;
+}
+
+.cabecera nav .nav-sobre-mi img {
+  margin: 0 -2.21rem;
+}
+
+/* Variante hover: se cambia un SVG por el otro */
+.cabecera nav .hover {
+  display: none;
+}
+
+.cabecera nav a:hover .normal,
+.cabecera nav a:focus-visible .normal {
+  display: none;
+}
+
+.cabecera nav a:hover .hover,
+.cabecera nav a:focus-visible .hover {
+  display: block;
+}
+
+/* ---------- 4. Portada ---------- */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.portada {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: -2.5rem;
+}
+
+.portada img {
+  width: auto;
+  max-width: 100%;    /* nunca más ancha que la ventana */
+  height: auto;
+  max-height: 50rem;  /* en escritorio mantiene el tamaño de Figma */
+}
+
+/* ---------- 5. Proyectos ---------- */
+.proyectos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7.5rem;
+  width: 86%;
+}
+
+.proyecto {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.proyecto img {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  transition: filter 0.3s;
+}
+
+/* Cada proyecto es un enlace a su página de detalle */
+.proyecto:hover img,
+.proyecto:focus-visible img {
+  filter: blur(0.05rem)
+}
+
+/* ---------- 6. Sobre mí ---------- */
+.sobre-mi {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  margin-top: 13.25rem;
+  padding: 0 3.75% 10.4rem 5.07%;
+  gap: 2%;
+}
+
+.presentacion {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 28%;
+  min-width: 0;
+  margin-bottom: 1.8rem;
+  font-size: var(--tam-cuerpo);
+}
+
+.presentacion h2 {
+  margin-bottom: 1.8rem;
+  font-size: var(--tam-titulo);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.presentacion p {
+  margin-bottom: 1.8rem;
+  font-weight: 500;
+
+}
+
+/* "Conocimiento en": es un h3 por semántica, pero se ve como texto normal */
+.presentacion h3 {
+  margin-bottom: 2rem;
+  font-size: var(--tam-cuerpo);
+  font-weight: 500;
+}
+
+.presentacion ul {
+  list-style: disc inside;
+  font-size: var(--tam-lista);
+  text-transform: uppercase;
+}
+
+/* Tamaño de la muñeca: cambia el 30% (más grande = 35%, 40%...) */
+.sobre-mi > img {
+  flex: 1 1 28%;
+  min-width: 0;
+  height: auto;
+}
+
+.contacto {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 34%;
+  min-width: 0;
+  gap: 1.5rem;
+  margin-bottom: 9.8rem;
+  font-style: normal; /* <address> viene en cursiva por defecto */
+  font-size: var(--tam-cuerpo);
+  min-width: max-content; /* la columna nunca es más angosta que el correo */
+  font-weight: 500;
+}
+
+.contacto a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  white-space: nowrap; /* el correo no se corta en dos líneas */
+  font-weight: 500;
+}
+
+/* Íconos de Instagram y correo (48px en desktop como en Figma) */
+.contacto img {
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+}
+
+/* ---------- 7. Página de detalle de proyecto ---------- */
+.cabecera-proyecto {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3.8rem;
+  padding: 2.9rem 5% 5.6rem;
+}
+
+/* Íconos del UI kit (carpeta iconos/): 48px como en Figma */
+.icono-home,
+.icono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+}
+
+.icono-home img,
+.icono img {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Componente DESCARGAR: variante hover de 61px (3.8rem) */
+.icono .hover,
+.icono .activa {
+  display: none;
+}
+
+a.icono:hover .normal,
+a.icono:focus-visible .normal {
+  display: none;
+}
+
+a.icono:hover .hover,
+a.icono:focus-visible .hover {
+  display: block;
+  width: 3.8rem;
+  height: 3.8rem;
+}
+
+.galeria {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.galeria img {
+  height: auto;
+  object-fit: cover;
+}
+
+.galeria .completa {
+  width: 100%;
+}
+
+.galeria .mitad {
+  width: 50%;
+}
+
+.detalle-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 7%;
+  width: 100%;
+  padding: 6rem 5% 6rem;
+}
+
+.acciones {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* Estrella: se rellena al hacer clic (sin JavaScript, con un checkbox) */
+.estrella input {
+  appearance: none;
+  width: 0;
+  height: 0;
+  margin: 0;
+  opacity: 0;
+}
+
+/* Al marcarla se cambia por la estrella rellena en rojo */
+.estrella input:checked ~ .normal {
+  display: none;
+}
+
+.estrella input:checked ~ .activa {
+  display: block;
+}
+
+.estrella:has(input:focus-visible) {
+  outline: 0.125rem solid var(--color-acento);
+}
+
+.texto-proyecto {
+  width: 43%;
+}
+
+.texto-proyecto h1 {
+  margin-bottom: 2rem;
+  font-size: var(--tam-titulo);
+  font-weight: 500;
+}
+
+.texto-proyecto p {
+  font-size: var(--tam-lista);
+  line-height: 1.5;
+}
+
+/* ---------- 8. Mobile y pantallas chicas (única media query) ----------
+   Se activa bajo 48rem (768px) para cubrir también tablets y
+   ventanas angostas de escritorio */
+@media (max-width: 48rem) {
+
+  html {
+    font-size: 100%; /* en mobile 1rem vuelve a ser 16px */
+  }
+
+  /* Tamaños de texto mobile */
+  :root {
+    --tam-logo: 3rem;
+    --tam-titulo: 2.25rem;
+    --tam-nav: 2rem;
+    --tam-cuerpo: 1.25rem;
+    --tam-lista: 1rem;
+  }
+
+  .presentacion h2 {
+    line-height: 1.2;
+  }
+
+  /* Botón SOBRE MÍ en mobile: mismo tamaño que en Figma mobile */
+  .cabecera nav img {
+    height: 4rem;
+  }
+
+  .cabecera nav .nav-sobre-mi img {
+    margin: 0 -2.656rem;
+  }
+
+  /* Layout: la cabecera es la pantalla de inicio de Figma mobile
+     (logo al centro, flecha BAJAR y luego el botón SOBRE MÍ centrado) */
+  .cabecera {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0;
+    padding: 0 5%;
+  }
+
+  .logo {
+    margin-top: 45vh;
+  }
+
+  .bajar {
+    display: flex;
+    margin-top: 2rem;
+  }
+
+  .bajar img {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .cabecera nav {
+    gap: 1rem;
+    margin-top: 45vh;
+  }
+
+  /* En mobile el menú solo muestra SOBRE MÍ */
+  .cabecera nav .nav-proyectos {
+    display: none;
+  }
+
+  .portada {
+    overflow: hidden;
+    margin-top: 0;
+  }
+
+  .portada img {
+   width: 126%;
+    max-width: none;
+  }
+
+  .proyectos {
+    width: 85.5%;
+    gap: 2.3rem;
+  }
+
+  .proyecto {
+    min-height: 0;
+  }
+
+  .proyecto img {
+    width: 100%;
+  }
+
+  .sobre-mi {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 6rem;
+    padding: 0 7% 3rem;
+  }
+
+  .presentacion h3 {
+    font-weight: 700;
+  }
+
+  .presentacion {
+    flex: none;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .sobre-mi > img {
+    flex: none;
+    width: 100%;
+    margin: 0 0 1.5rem;
+  }
+
+  .contacto {
+    flex: none;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+
+  /* Detalle de proyecto en mobile: la cabecera vuelve a ser una fila */
+  .cabecera-proyecto {
+    flex-direction: row;
+    gap: 1.5rem;
+    padding: 1.5rem 5%;
+  }
+
+  .cabecera-proyecto nav {
+    margin-top: 0;
+  }
+
+  .icono-home,
+  .icono,
+  .icono-home img,
+  .icono img {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  a.icono:hover .hover,
+  a.icono:focus-visible .hover {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  /* En mobile los íconos de contacto miden 24px como en Figma */
+  .contacto img {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .galeria .mitad {
+    width: 100%;
+  }
+
+  .detalle-info {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 2.5rem 6% 3rem;
+  }
+
+  .texto-proyecto {
+    width: 100%;
+  }
+
+  .texto-proyecto h1 {
+    margin-bottom: 1rem;
+  }
+}
