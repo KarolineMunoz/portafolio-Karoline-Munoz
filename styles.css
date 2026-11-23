@@ -82,13 +82,13 @@ body {
   font-family: var(--fuente);
   font-weight: 400;
   line-height: normal; /* "Auto" en Figma */
-   cursor: url("iconos/cursor.svg") 16 16, auto;
+   cursor: url("cursor.svg") 16 16, auto;
 }
 
 /* Cursor personalizado también sobre enlaces y botones */
 a,
 label {
-  cursor: url("iconos/cursor.svg") 16 16, pointer;
+  cursor: url("cursor.svg") 16 16, pointer;
 }
 
 img {
